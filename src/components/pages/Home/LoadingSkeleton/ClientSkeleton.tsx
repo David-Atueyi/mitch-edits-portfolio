@@ -3,7 +3,7 @@ import React from "react";
 export const ClientSkeleton: React.FC = () => {
   return (
     <div className="flex gap-3 animate-pulse w-[90dvw]">
-      {[...Array(4)].map((_, index) => (
+      {[...Array(10)].map((_, index) => (
         <div
           key={index}
           className="flex gap-6 py-2 pl-4 items-center mobile:flex-[0_0_90%] tablet:flex-[0_0_50%] pc:flex-[0_0_35%] biggerPc:flex-[0_0_20%] ml-4 bg-gray-500 rounded-lg"
