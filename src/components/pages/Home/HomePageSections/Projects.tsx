@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { EmblaOptionsType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
 import {
@@ -15,56 +15,54 @@ type PropType = {
 };
 
 export const Projects: React.FC<PropType> = ({ options }) => {
-
   const { data: myProjects = [] } = useGetProjects();
 
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const currentVideoIndex = useRef<number | null>(null);
   const {
     prevBtnDisabled,
     nextBtnDisabled,
     onPrevButtonClick,
     onNextButtonClick,
   } = usePrevNextButtons(emblaApi);
-  const isPC = window.innerWidth >= 1000;
+  const isMobile = window.innerWidth < 1000;
 
-  useEffect(() => {
-    const handlePlay = (index: number) => {
-      videoRefs.current.forEach((video, i) => {
-        if (i !== index) {
-          video?.pause();
-          if (video) video.currentTime = 0;
-        }
-      });
-    };
+  const handleVideoPlay = (index: number) => {
+    if (
+      currentVideoIndex.current !== null &&
+      currentVideoIndex.current !== index
+    ) {
+      const prevVideo = videoRefs.current[currentVideoIndex.current];
+      if (prevVideo) {
+        prevVideo.pause();
+      }
+    }
 
-    const handleClick = (index: number) => {
+    const currentVideo = videoRefs.current[index];
+    if (currentVideo) {
+      currentVideo.play();
+      currentVideoIndex.current = index;
+    }
+  };
+
+  const handleMouseEnter = (index: number) => {
+    if (!isMobile) {
       const video = videoRefs.current[index];
-      if (video?.paused) {
-        handlePlay(index);
+      if (video) {
         video.play();
-      } else {
-        video?.pause();
-        video && (video.currentTime = 0);
       }
-    };
+    }
+  };
 
-    videoRefs.current.forEach((video, index) => {
-      video?.addEventListener("play", () => handlePlay(index));
-      if (!isPC) {
-        video?.addEventListener("click", () => handleClick(index));
+  const handleMouseLeave = (index: number) => {
+    if (!isMobile) {
+      const video = videoRefs.current[index];
+      if (video) {
+        video.pause();
       }
-    });
-
-    return () => {
-      videoRefs.current.forEach((video, index) => {
-        video?.removeEventListener("play", () => handlePlay(index));
-        if (!isPC) {
-          video?.removeEventListener("click", () => handleClick(index));
-        }
-      });
-    };
-  }, [isPC]);
+    }
+  };
 
   return (
     <div id="my-creation" className="flex flex-col items-center gap-10">
@@ -91,17 +89,11 @@ export const Projects: React.FC<PropType> = ({ options }) => {
                     loop
                     muted
                     playsInline
+                    controls
                     className="absolute w-full h-full object-cover"
-                    {...(isPC
-                      ? {
-                          onMouseEnter: () => videoRefs.current[index]?.play(),
-                          onMouseLeave: () => {
-                            const video = videoRefs.current[index];
-                            video?.pause();
-                            video && (video.currentTime = 0);
-                          },
-                        }
-                      : { onClick: (e) => e.preventDefault() })}
+                    onMouseEnter={() => handleMouseEnter(index)}
+                    onMouseLeave={() => handleMouseLeave(index)}
+                    onPlay={() => handleVideoPlay(index)}
                   />
                 </div>
               </div>
