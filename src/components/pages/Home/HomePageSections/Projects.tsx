@@ -9,13 +9,14 @@ import {
 import { ScrollReveal } from "../../../base/hooks/ScrollReveal";
 import phoneImage from "../../../../assets/image/phone.png";
 import { useGetProjects } from "../../../base/utilities/handleProjects/useGetProjects";
+import { ProjectsSkeleton } from "../LoadingSkeleton/ProjectsSkeleton";
 
 type PropType = {
   options?: EmblaOptionsType;
 };
 
 export const Projects: React.FC<PropType> = ({ options }) => {
-  const { data: myProjects = [] } = useGetProjects();
+  const { data: myProjects = [], isLoading } = useGetProjects();
 
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
@@ -69,37 +70,42 @@ export const Projects: React.FC<PropType> = ({ options }) => {
       <h2 className="text-center text-3xl font-extrabold text-white">
         A Glimpse of My Creations
       </h2>
+
       <ScrollReveal className="relative flex max-w-[1200px] m-auto pb-16">
-        <div className="overflow-hidden w-[90dvw]" ref={emblaRef}>
-          <div className="flex gap-3">
-            {myProjects.map((myProject, index) => (
-              <div
-                key={myProject.id}
-                className="m-1 mobile:flex-[0_0_90%] tablet:flex-[0_0_60%] pc:flex-[0_0_40%] biggerPc:flex-[0_0_25%] h-full"
-              >
-                <img
-                  src={phoneImage}
-                  alt=""
-                  className="w-full h-full object-contain relative"
-                />
-                <div className="bg-black mobile:w-[79.85%] rounded-b-lg tablet:w-[53.4%] pc:w-[35.4%] biggerPc:w-[22.1%] h-[85%] absolute top-[8.8%] mobile:ml-[5.2%] tablet:ml-[3.31%] pc:ml-[2.3%] biggerPc:ml-[1.4%]">
-                  <video
-                    ref={(el) => (videoRefs.current[index] = el)}
-                    src={myProject.video_url}
-                    loop
-                    muted
-                    playsInline
-                    controls
-                    className="absolute w-full h-full object-cover"
-                    onMouseEnter={() => handleMouseEnter(index)}
-                    onMouseLeave={() => handleMouseLeave(index)}
-                    onPlay={() => handleVideoPlay(index)}
+        {isLoading ? (
+          <ProjectsSkeleton />
+        ) : (
+          <div className="overflow-hidden w-[90dvw]" ref={emblaRef}>
+            <div className="flex gap-3">
+              {myProjects.map((myProject, index) => (
+                <div
+                  key={myProject.id}
+                  className="m-1 mobile:flex-[0_0_90%] tablet:flex-[0_0_60%] pc:flex-[0_0_40%] biggerPc:flex-[0_0_25%] h-full"
+                >
+                  <img
+                    src={phoneImage}
+                    alt=""
+                    className="w-full h-full object-contain relative"
                   />
+                  <div className="bg-black mobile:w-[79.85%] rounded-b-lg tablet:w-[53.4%] pc:w-[35.4%] biggerPc:w-[22.1%] h-[85%] absolute top-[8.8%] mobile:ml-[5.2%] tablet:ml-[3.31%] pc:ml-[2.3%] biggerPc:ml-[1.4%]">
+                    <video
+                      ref={(el) => (videoRefs.current[index] = el)}
+                      src={myProject.video_url}
+                      loop
+                      muted
+                      playsInline
+                      controls
+                      className="absolute w-full h-full object-cover"
+                      onMouseEnter={() => handleMouseEnter(index)}
+                      onMouseLeave={() => handleMouseLeave(index)}
+                      onPlay={() => handleVideoPlay(index)}
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        )}
         <ScrollReveal className="absolute bottom-3">
           <div className="flex gap-3">
             <PrevButton

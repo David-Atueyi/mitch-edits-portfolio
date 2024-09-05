@@ -4,10 +4,11 @@ import Autoplay from "embla-carousel-autoplay";
 import AutoScroll from "embla-carousel-auto-scroll";
 import { ScrollReveal } from "../../../base/hooks/ScrollReveal";
 import { useGetClients } from "../../../base/utilities/handleClients/useGetClients";
+import { ClientSkeleton } from "../LoadingSkeleton/ClientSkeleton";
 
 export const Clients = ({ options }: { options?: EmblaOptionsType }) => {
 
-  const { data: clients = [] } = useGetClients();
+  const { data: clients = [], isLoading } = useGetClients();
 
   const [emblaRef] = useEmblaCarousel({ loop: true, ...options }, [
     Autoplay(),
@@ -21,6 +22,9 @@ export const Clients = ({ options }: { options?: EmblaOptionsType }) => {
       </ScrollReveal>
       <ScrollReveal className="relative">
         <div className="overflow-hidden" ref={emblaRef}>
+        {isLoading ? (
+          <ClientSkeleton />
+        ) : (
           <div className="flex">
             {clients.map(( client ) => (
               <div
@@ -42,7 +46,7 @@ export const Clients = ({ options }: { options?: EmblaOptionsType }) => {
                 </div>
               </div>
             ))}
-          </div>
+          </div>)}
         </div>
         <div className="absolute mobile:w-8 tablet:w-16 pc:w-36 bg-gradient-to-r from-black via-black/90 via-30% to-black/10 h-full bottom-0 left-0"></div>
         <div className="absolute mobile:w-8 tablet:w-16 pc:w-36 h-full bg-gradient-to-r from-black/10 via-black/90 via-60% to-black bottom-0 right-0"></div>
