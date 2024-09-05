@@ -16,7 +16,7 @@ type PropType = {
 
 export const Projects: React.FC<PropType> = ({ options }) => {
 
-  const { data: projects = [] } = useGetProjects();
+  const { data: myProjects = [] } = useGetProjects();
 
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
@@ -30,19 +30,41 @@ export const Projects: React.FC<PropType> = ({ options }) => {
 
   useEffect(() => {
     const handlePlay = (index: number) => {
-      videoRefs.current.forEach((video, i) => i !== index && video?.pause());
+      videoRefs.current.forEach((video, i) => {
+        if (i !== index) {
+          video?.pause();
+          if (video) video.currentTime = 0;
+        }
+      });
+    };
+
+    const handleClick = (index: number) => {
+      const video = videoRefs.current[index];
+      if (video?.paused) {
+        handlePlay(index);
+        video.play();
+      } else {
+        video?.pause();
+        video && (video.currentTime = 0);
+      }
     };
 
     videoRefs.current.forEach((video, index) => {
       video?.addEventListener("play", () => handlePlay(index));
+      if (!isPC) {
+        video?.addEventListener("click", () => handleClick(index));
+      }
     });
 
     return () => {
       videoRefs.current.forEach((video, index) => {
         video?.removeEventListener("play", () => handlePlay(index));
+        if (!isPC) {
+          video?.removeEventListener("click", () => handleClick(index));
+        }
       });
     };
-  }, []);
+  }, [isPC]);
 
   return (
     <div id="my-creation" className="flex flex-col items-center gap-10">
@@ -52,9 +74,9 @@ export const Projects: React.FC<PropType> = ({ options }) => {
       <ScrollReveal className="relative flex max-w-[1200px] m-auto pb-16">
         <div className="overflow-hidden w-[90dvw]" ref={emblaRef}>
           <div className="flex gap-3">
-            {projects.map((project, index) => (
+            {myProjects.map((myProject, index) => (
               <div
-                key={project.id}
+                key={myProject.id}
                 className="m-1 mobile:flex-[0_0_90%] tablet:flex-[0_0_60%] pc:flex-[0_0_40%] biggerPc:flex-[0_0_25%] h-full"
               >
                 <img
@@ -65,20 +87,21 @@ export const Projects: React.FC<PropType> = ({ options }) => {
                 <div className="bg-black mobile:w-[79.85%] rounded-b-lg tablet:w-[53.4%] pc:w-[35.4%] biggerPc:w-[22.1%] h-[85%] absolute top-[8.8%] mobile:ml-[5.2%] tablet:ml-[3.31%] pc:ml-[2.3%] biggerPc:ml-[1.4%]">
                   <video
                     ref={(el) => (videoRefs.current[index] = el)}
-                    src={project.video_url}
+                    src={myProject.video_url}
                     loop
-                    controls
                     muted
+                    playsInline
                     className="absolute w-full h-full object-cover"
-                    onClick={() =>
-                      videoRefs.current.forEach(
-                        (video, i) => i !== index && video?.pause()
-                      )
-                    }
-                    {...(isPC && {
-                      onMouseEnter: () => videoRefs.current[index]?.play(),
-                      onMouseLeave: () => videoRefs.current[index]?.pause(),
-                    })}
+                    {...(isPC
+                      ? {
+                          onMouseEnter: () => videoRefs.current[index]?.play(),
+                          onMouseLeave: () => {
+                            const video = videoRefs.current[index];
+                            video?.pause();
+                            video && (video.currentTime = 0);
+                          },
+                        }
+                      : { onClick: (e) => e.preventDefault() })}
                   />
                 </div>
               </div>
