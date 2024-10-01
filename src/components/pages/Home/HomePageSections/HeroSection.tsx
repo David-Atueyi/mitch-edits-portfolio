@@ -41,7 +41,7 @@ export const HeroSection = () => {
                 </Link>
                 <div className="mobile:bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] rounded">
                   <Link
-                    to="https://www.instagram.com/mitchedits_?igsh=bm93cDhsenZmOXN0"
+                    to="https://www.instagram.com/mitchelle.kennedy.a?igsh=cGVkdW9sYjdoODZp&utm_source=qr"
                     className="block w-fit p-0.5 hover:bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] pc:bg-black rounded"
                   >
                     <InstagramIcon className="w-7 h-7 fill-white" />

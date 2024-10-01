@@ -111,7 +111,7 @@ export const SkillsSection = () => {
           Are you ready to work with me?
         </ScrollReveal>
         <Link
-          to="https://www.instagram.com/mitchedits_?igsh=bm93cDhsenZmOXN0"
+          to="https://www.instagram.com/mitchelle.kennedy.a?igsh=cGVkdW9sYjdoODZp&utm_source=qr"
           className="text-lg rounded-lg px-6 py-2 bg-[#38b6ff] transition duration-300"
         >
           <span>Lets Talk</span>

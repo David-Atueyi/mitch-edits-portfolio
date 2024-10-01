@@ -35,7 +35,7 @@ export const GeneralFooterLayout = () => {
                 </span>
               </Link>
               <Link
-                to="https://www.instagram.com/mitchedits_?igsh=bm93cDhsenZmOXN0"
+                to="https://www.instagram.com/mitchelle.kennedy.a?igsh=cGVkdW9sYjdoODZp&utm_source=qr"
                 className="flex gap-2 w-fit"
               >
                 <div className="p-0.5 bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] rounded">

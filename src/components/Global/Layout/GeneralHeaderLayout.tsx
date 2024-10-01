@@ -78,7 +78,7 @@ export const GeneralHeaderLayout = () => {
         </div>
 
         <Link
-          to="https://www.instagram.com/mitchedits_?igsh=bm93cDhsenZmOXN0"
+          to="https://www.instagram.com/mitchelle.kennedy.a?igsh=cGVkdW9sYjdoODZp&utm_source=qr"
           className="text-lg rounded-lg px-6 py-2 bg-[#38b6ff] transition duration-300 mobile:hidden mediumPc:flex gap-2 items-center"
         >
           <span>Get in Touch</span>
@@ -113,7 +113,7 @@ export const GeneralHeaderLayout = () => {
           ))}
 
           <Link
-            to="https://www.instagram.com/mitchedits_?igsh=bm93cDhsenZmOXN0"
+            to="https://www.instagram.com/mitchelle.kennedy.a?igsh=cGVkdW9sYjdoODZp&utm_source=qr"
             className="text-lg rounded-lg px-4 py-2 bg-[#38b6ff] text-white w-[80%] flex justify-center items-center gap-2"
           >
             <span>Get in Touch</span>
